@@ -17,6 +17,7 @@ int main(int argc, char const *argv[]) {
     long fsize = ftell(fp);
     rewind(fp);
     char* code = malloc(fsize);
+    int* jumps = calloc(fsize, 2);
     fread(code, fsize, 1, fp);
     fclose(fp);
     char* ptr = calloc(argc > 2 ? atoi(argv[2]) : 1024, 1);
@@ -38,33 +39,47 @@ int main(int argc, char const *argv[]) {
             break;
         case '[':
             if(!*ptr) {
-                int open = 1;
-                while (open > 0 && ++c_ptr < fsize) {
-                    if (code[c_ptr] == ']') {
-                        --open;
-                    } else if(code[c_ptr] == '[') {
-                        ++open;
+                if (jumps[c_ptr]) {
+                    c_ptr = jumps[c_ptr] - 1;
+                } else {
+                    int c_ptr_start = c_ptr;
+                    int open = 1;
+                    while (open > 0 && ++c_ptr < fsize) {
+                        if (code[c_ptr] == ']') {
+                            --open;
+                        } else if(code[c_ptr] == '[') {
+                            ++open;
+                        }
                     }
-                }
-                if(open) {
-                    printf("ERROR: Brackets does not match!\n");
-                    return 3;
+                    if(open) {
+                        printf("ERROR: Brackets does not match!\n");
+                        return 3;
+                    }
+                    jumps[c_ptr_start] = c_ptr + 1;
+                    jumps[c_ptr] = c_ptr_start + 1;
                 }
             }
             break;
         case ']':
             if(*ptr) {
-                int open = 1;
-                while (open > 0 && --c_ptr >= 0) {
-                    if (code[c_ptr] == '[') {
-                        --open;
-                    } else if(code[c_ptr] == ']') {
-                        ++open;
+                if (jumps[c_ptr]) {
+                    c_ptr = jumps[c_ptr] - 1;
+                } else {
+                    int c_ptr_start = c_ptr;
+                    int open = 1;
+                    while (open > 0 && --c_ptr >= 0) {
+                        if (code[c_ptr] == '[') {
+                            --open;
+                        } else if(code[c_ptr] == ']') {
+                            ++open;
+                        }
                     }
-                }
-                if(open) {
-                    printf("ERROR: Brackets does not match!\n");
-                    return 3;
+                    if(open) {
+                        printf("ERROR: Brackets does not match!\n");
+                        return 3;
+                    }
+                    jumps[c_ptr_start] = c_ptr + 1;
+                    jumps[c_ptr] = c_ptr_start + 1;
                 }
             }
             break;
