@@ -24,9 +24,19 @@ int main(int argc, char const *argv[]) {
 						break;
 				case '<': --ptr;
 						break;
-				case '+': ++*ptr;
+				case '+':
+						if(*ptr == 127) {
+								printf("ERROR: Invalid byte value!\n");
+								return 3;
+						}
+						++*ptr;
 						break;
-				case '-': --*ptr;
+				case '-':
+						if(!*ptr) {
+								printf("ERROR: Invalid byte value!\n");
+								return 3;
+						}
+						--*ptr;
 						break;
 				case '.': putchar(*ptr);
 						break;
@@ -35,34 +45,32 @@ int main(int argc, char const *argv[]) {
 				case '[':
 						if(!*ptr) {
 								int open = 1;
-								while (open > 0 && c_ptr < fsize) {
-										++c_ptr;
+								while (open > 0 && ++c_ptr < fsize) {
 										if (code[c_ptr] == ']') {
-												open--;
+												--open;
 										} else if(code[c_ptr] == '[') {
-												open++;
+												++open;
 										}
 								}
 								if(open) {
 										printf("ERROR: Brackets does not match!\n");
-										return 3;
+										return 4;
 								}
 						}
 						break;
 				case ']':
 						if(*ptr) {
 								int open = 1;
-								while (open > 0 && c_ptr >= 0) {
-										--c_ptr;
+								while (open > 0 && --c_ptr >= 0) {
 										if (code[c_ptr] == '[') {
-												open--;
+												--open;
 										} else if(code[c_ptr] == ']') {
-												open++;
+												++open;
 										}
 								}
 								if(open) {
 										printf("ERROR: Brackets does not match!\n");
-										return 3;
+										return 4;
 								}
 						}
 						break;
