@@ -17,7 +17,7 @@ int main(int argc, char const *argv[]) {
 		char* code = malloc(fsize);
 		fread(code, fsize, 1, fp);
 		fclose(fp);
-		char* ptr = calloc(argc > 2 ? atoi(argv[2]) : 1000, 1);
+		char* ptr = calloc(argc > 2 ? atoi(argv[2]) : 1024, 1);
 		for(int c_ptr = 0; c_ptr < fsize; ++c_ptr) {
 				switch (code[c_ptr]) {
 				case '>': ++ptr;
@@ -25,17 +25,9 @@ int main(int argc, char const *argv[]) {
 				case '<': --ptr;
 						break;
 				case '+':
-						if(*ptr == 127) {
-								printf("ERROR: Invalid byte value!\n");
-								return 3;
-						}
 						++*ptr;
 						break;
 				case '-':
-						if(!*ptr) {
-								printf("ERROR: Invalid byte value!\n");
-								return 3;
-						}
 						--*ptr;
 						break;
 				case '.': putchar(*ptr);
@@ -54,7 +46,7 @@ int main(int argc, char const *argv[]) {
 								}
 								if(open) {
 										printf("ERROR: Brackets does not match!\n");
-										return 4;
+										return 3;
 								}
 						}
 						break;
@@ -70,7 +62,7 @@ int main(int argc, char const *argv[]) {
 								}
 								if(open) {
 										printf("ERROR: Brackets does not match!\n");
-										return 4;
+										return 3;
 								}
 						}
 						break;
