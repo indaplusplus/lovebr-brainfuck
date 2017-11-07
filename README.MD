@@ -9,13 +9,6 @@ bfr hello_world.bc <memory_size>
 ## Benchmarks
 
 ### Interpreter
-
-#### Naive
 ```
-mandelbrot.bc: 116.164398 seconds
-```
-
-#### Smart
-```
-mandelbrot.bc: 48.059677 seconds
+mandelbrot.bc: 73.042000 seconds
 ```
