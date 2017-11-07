@@ -17,7 +17,7 @@ int main(int argc, char const *argv[]) {
     long fsize = ftell(fp);
     rewind(fp);
     char* code = malloc(fsize);
-    int* jumps = calloc(fsize, 2);
+    int* jumps = calloc(fsize, 4);
     fread(code, fsize, 1, fp);
     fclose(fp);
     int ptr = 0;
@@ -96,5 +96,8 @@ int main(int argc, char const *argv[]) {
         }
     }
     printf("Execution took %f seconds.\n", (float)(clock() - start) / CLOCKS_PER_SEC);
+    free(code);
+    free(jumps);
+    free(memory);
     return 0;
 }
