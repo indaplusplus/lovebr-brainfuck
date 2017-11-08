@@ -20,8 +20,8 @@ int main(int argc, char const *argv[]) {
     int* jumps = calloc(fsize, 4);
     fread(code, fsize, 1, fp);
     fclose(fp);
-    int ptr = 0;
     int mem_size = argc > 2 ? atoi(argv[2]) : 1024;
+    int ptr = 0;
     char* memory = calloc(argc > 2 ? atoi(argv[2]) : 1024, 1);
     for(int c_ptr = 0; c_ptr < fsize; ++c_ptr) {
         switch (code[c_ptr]) {
